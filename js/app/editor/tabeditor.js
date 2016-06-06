@@ -490,7 +490,7 @@ define(['editor/tabsection', 'app/utils'], function(TabsSection, Utils) {
 				self.removeSection($(this).parents(".tabsection"));
 			});
 
-			$("#insert-chords").click(function(){
+			$("#insert-chords").click(function() {
 				var id = parseInt($(".tabsection.active").attr("data-id"));
 				var selected = $("#chords").find(":selected");
 				self.htmlSections[id].insertChord(selected.attr("value"),selected.attr("mode"));
@@ -498,14 +498,73 @@ define(['editor/tabsection', 'app/utils'], function(TabsSection, Utils) {
 				return false;
 			});
 
-			$(".modifier").click(function(){
+			$(".modifier").click(function() {
 				var id=parseInt($(".tabsection.active").attr("data-id"));
 				self.htmlSections[id].insertModifier($(this).attr("data-modifier"));
 				return false;
 			});
 
-			$(document).on("blur", ".tabblock", function(e){
+			$(document).on("blur", ".tabblock", function(e) {
 				self.prevActiveTabBlock = $(this);
+			});
+
+			//@fixme
+			$(document).on("keydown", ".tabblock", function(e) {
+				return tabsInstance.tabsEditor.onKeyDown(e);
+    	});
+
+			$(document).on("keyup", ".tabtext", function(e) {
+				return tabsInstance.tabsEditor.onKeyDown(e);
+    	});
+
+			$(document).on('click', '.youtube_edit', function() {
+				var parent = $(this).parents(".tabsection");
+				$(".youtube_edit_data", parent).show();
+				$(".youtube_title", parent).hide();
+				return false;
+			});
+
+	    $(document).on('click', '.loadyoutube', function() {
+				self.setActiveSection($(this).parents(".tabsection"));
+	    	self.getCurrentSection().loadYoutubeLink();
+		    return false;
+	    });
+
+	    $("#songdata #song").change(function() {
+				self.changeSongTitle($(this).val());
+			});
+
+			$("#songdata #artist").change(function() {
+				self.changeSongArtist($(this).val());
+			});
+
+			$("#songdata #transcriber").change(function() {
+				self.changeSongTranscriber($(this).val());
+			});
+
+			$("#lfingers a").click(function() {
+				var id = parseInt($(".tabsection.active").attr("data-id"));
+				var finger = $(this).attr("data-modifier").replace("lfinger", "");
+				self.htmlSections[id].setLFingerValue(finger);
+				return false;
+			});
+
+			$("#open-tabtext").click(function() {
+				var id = parseInt($(".tabsection.active").attr("data-id"));
+				self.htmlSections[id].showTextDialog();
+				return false;
+			});
+
+			$(".colmodifier").click(function() {
+				var id = parseInt($(".tabsection.active").attr("data-id"));
+				self.htmlSections[id].insertColumnModifier($(this).attr("data-modifier"));
+				return false;
+			});
+
+			$("#parse_tab").click(function(){
+				var parser = new KORDS.TABS.TabParser($("#text").val());
+				self.loadFromParser(parser.parse());
+				return false;
 			});
 		}
 	}

@@ -1,4 +1,4 @@
-define(['app/tabsdata', 'painter/tabcanvaspainter'], function(TabsData, CanvasPainter) {
+define(['app/tabsdata', 'painter/tabcanvaspainter', 'app/utils'], function(TabsData, CanvasPainter, Utils) {
 	'use strict';
 
 	var defaultNumMeasuresPerStave = 4;
@@ -181,6 +181,7 @@ define(['app/tabsdata', 'painter/tabcanvaspainter'], function(TabsData, CanvasPa
 				row = parseInt(curCell.attr("data-row"));
 			}
 
+			var cell = null;
 			if (cell = this.getStringCellValue(col, row) && cell.note != EMPTY_NOTE) {
 				this.setStringLFingerValue(col, row, value);
 				this.updateText();
@@ -360,34 +361,34 @@ define(['app/tabsdata', 'painter/tabcanvaspainter'], function(TabsData, CanvasPa
 			};
 
 			$("#note_text").val(this.sectionData.data['colmodifiers']['text'][col]);
-			$this=this;
 
+			var self = this;
 			this.tabBlockTextDialog = $("#tabblocktext_dialog").dialog({
 				width: 300,
 				open: function() {
 					$("#tabblocktext_dialog").keypress(function(e) {
 						if (e.keyCode == $.ui.keyCode.ENTER)
-							$this.closeTabBlockTextDialog($("#note_text").val());
+							self.closeTabBlockTextDialog($("#note_text").val());
 					});
 				},
 				buttons: [
 					{
 						text: "Ok",
 						click: function() {
-							$this.closeTabBlockTextDialog($("#note_text").val());
+							self.closeTabBlockTextDialog($("#note_text").val());
 							prevActiveTabBlock.focus();
 						}
 					},
 					{
 						text: "Clear",
 						click: function() {
-							$this.closeTabBlockTextDialog(null);
+							self.closeTabBlockTextDialog(null);
 						}
 					},
 					{
 						text: "Cancel",
 						click: function() {
-							$this.closeTabBlockTextDialog();
+							self.closeTabBlockTextDialog();
 						}
 					}
 				]
@@ -471,7 +472,7 @@ define(['app/tabsdata', 'painter/tabcanvaspainter'], function(TabsData, CanvasPa
 				this.sectionData.data['colmodifiers'][group][col] = value;
 			}
 
-			if (objectSize(this.sectionData.data['colmodifiers'][group]) > 0) {
+			if (Utils.objectSize(this.sectionData.data['colmodifiers'][group]) > 0) {
 				$(".tabblock tr.extra." + group).show();
 			} else {
 				$(".tabblock tr.extra." + group).hide();
@@ -668,6 +669,7 @@ define(['app/tabsdata', 'painter/tabcanvaspainter'], function(TabsData, CanvasPa
 
 			$("#rfingers a").removeClass("checked");
 
+			var rfingers = null;
 			if (rfinger != null) {
 				rfingers = rfinger.split("");
 				for (var i = 0; i < rfingers.length; i++) {
@@ -737,6 +739,7 @@ define(['app/tabsdata', 'painter/tabcanvaspainter'], function(TabsData, CanvasPa
 		toggleBarLine: function(col) {
 			var lineToggles = ["|", null];
 
+			var index = 0;
 			var currentVal = this.getBarLine(col);
 			if (currentVal == null) {
 				index = 0;
@@ -753,6 +756,7 @@ define(['app/tabsdata', 'painter/tabcanvaspainter'], function(TabsData, CanvasPa
 				"arrows":["up_arrow", "down_arrow", "rasgueo", "alzapua", "rasgueo3", "rasgueo4", null]
 			};
 
+			var index = 0;
 			var currentVal = this.sectionData.data['colmodifiers'][modifierGroup][col];
 			if (currentVal == null) {
 				index = 0;

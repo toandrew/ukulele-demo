@@ -193,7 +193,7 @@ define(['app/utils'], function(Utils){
 			if (group == "rfingers") {
 				cy = this.staveOffsetY + this.staveHeight + this.columnsModifiersMargin;
 			} else {
-				var line = this.nonEmptyTopModifiers.indexOf(topColumnModifiers.indexOf(group));
+				var line = this.nonEmptyTopModifiers.indexOf(UkuConstants.topColumnModifiers.indexOf(group));
 				cy = line * (this.modifierHeight + this.modifierMargin) + this.modifierHeight/2;
 			}
 
@@ -300,7 +300,7 @@ define(['app/utils'], function(Utils){
 			var cx0 = fromPos * this.stepX + this.noteMargin;
 			var cx1 = toPos * this.stepX + this.noteMargin;
 
-			if (isNumber(string)) {
+			if (Utils.isNumber(string)) {
 				var val0 = this.tabArray[string][fromPos] ? this.tabArray[string][fromPos].note : 0;
 				var val1 = this.tabArray[string][toPos] ? this.tabArray[string][toPos].note : 0;
 

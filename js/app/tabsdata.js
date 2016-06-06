@@ -4,7 +4,7 @@ define(function(){
 	var TabsData = {};
 
 	TabsData.NoteCell = function() {
-		this.note = EMPTY_NOTE;
+		this.note = UkuConstants.EMPTY_NOTE;
 	}
 
 	TabsData.EmptySection = function() {
@@ -14,7 +14,7 @@ define(function(){
 	TabsData.YoutubeSection = function() {
 		this.youtubeId = '';
 		this.videoTitle = '';
-		this.type ='youtube';
+		this.type = 'youtube';
 	}
 
 	TabsData.TextSection = function() {
@@ -25,24 +25,24 @@ define(function(){
 	TabsData.TabSection = function() {
 		this.type = 'tabs';
 		this.data = {
-			'numstrings': tabBlockNumStrings,
-			'numcolumns': tabBlockLength,
-			'tuning': tabBlockNotes,
-			'strings': new Array(tabBlockNumStrings),
+			'numstrings': UkuConstants.getTabBlockNumStrings(),
+			'numcolumns': UkuConstants.getTabBlockLength(),
+			'tuning': UkuConstants.tabBlockNotes,
+			'strings': new Array(UkuConstants.getTabBlockNumStrings()),
 			'colmodifiers': {},
 			'barlines': {}
 		};
 
-		for (var i = 0; i < tabBlockNumStrings; i++) {
+		for (var i = 0; i < UkuConstants.getTabBlockNumStrings(); i++) {
 			this.data['strings'][i] = {};
 		}
 
-		for (var i = 0; i < topColumnModifiers.length; i++) {
-			this.data['colmodifiers'][topColumnModifiers[i]] = {};
+		for (var i = 0; i < UkuConstants.topColumnModifiers.length; i++) {
+			this.data['colmodifiers'][UkuConstants.topColumnModifiers[i]] = {};
 		}
 
-		for (var i = 0; i < bottomColumnModifiers.length; i++) {
-			this.data['colmodifiers'][bottomColumnModifiers[i]] = {};
+		for (var i = 0; i < UkuConstants.bottomColumnModifiers.length; i++) {
+			this.data['colmodifiers'][UkuConstants.bottomColumnModifiers[i]] = {};
 		}
 	}
 
@@ -80,5 +80,12 @@ define(function(){
 		}
 	}
 
-	return TabsData;
+	return {
+		NoteCell: TabsData.NoteCell,
+		EmptySection: TabsData.EmptySection,
+		YoutubeSection: TabsData.YoutubeSection,
+		TextSection: TabsData.TextSection,
+		Song: TabsData.Song,
+		TabSection: TabsData.TabSection
+	} 
 });

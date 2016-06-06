@@ -1,71 +1,8 @@
-define(['editor/tabsection'], function(TabsSection) {
+define(['editor/tabsection', 'app/utils'], function(TabsSection, Utils) {
 	'use strict';
 
 	var Editor = function(song) {
-		this.showSongInfo = true;
-
-		this.song = song;
-		this.numSections = 0;
-		this.htmlSections = [];
-
-		// create element !!!!!!!!!!!!
-		this.prettyDivId = "pretty-tab";
-		this.prettyTabsDiv = document.getElementById(this.prettyDivId);
-
-		TabsSection.insertTabBlock();
-
-		//@fixme put everything together
-    $(document).on("click", "#add_youtube", function() {
-			tabsInstance.tabsEditor.addSection($(this).parents(".tabsection"), 'youtube');
-			return false;
-		});
-
-    $(document).on("click", "#add_text", function() {
-			tabsInstance.tabsEditor.addSection($(this).parents(".tabsection"), 'text');
-			return false;
-		});
-
-		$(document).on("click", "#add_tabs", function() {
-			tabsInstance.tabsEditor.addSection($(this).parents(".tabsection"), 'tabs');
-			$(".active .tabblock").focus();
-
-			return false;
-		});
-
-		$(document).on("click", ".tabblock tr.string td", function() {
-			tabsInstance.tabsEditor.setActiveSection($(this).parents(".tabsection"), $(this));
-	  });
-
-		$(document).on("focus", ".tabtext", function() {
-			tabsInstance.tabsEditor.setActiveSection($(this).parents(".tabsection"));
-		});
-
-		$(document).on("blur", ".tabtext", function() {
-			//$(this).parents(".tabsection").removeClass("active");
-			//$("#context-menu").hide();
-		});
-
-		$(document).on("mouseenter", "div.tabsection", function() {
-			$(this).removeClass("hover").addClass("hover");
-			$(this).find(".tabs-editor-context-menu").show();
-			$(this).append($("#context-menu").show());
-			if ($(this).hasClass("text")) {
-				contextMenu.find("#add_text").hide();
-			}
-			else {
-				contextMenu.find("#add_text").show();
-			}
-		});
-
-
-		$(document).on("mouseleave", "div.tabsection", function() {
-			$(this).removeClass("hover");
-			$("#context-menu").hide();
-		});
-
-		$(document).on("click", "#remove_section", function() {
-			tabsInstance.tabsEditor.removeSection($(this).parents(".tabsection"));
-		});
+		this._init(song);
 	}
 
 	function getOffsetFromId(id) {
@@ -140,14 +77,14 @@ define(['editor/tabsection'], function(TabsSection) {
 			newNode.show();
 
 			if ($("#empty-context-menu").is(":visible")) {
-				contextMenu = $("#empty-context-menu").clone();
-				contextMenu.attr("id", "context-menu");
-				contextMenu.show();
+				this.contextMenu = $("#empty-context-menu").clone();
+				this.contextMenu.attr("id", "context-menu");
+				this.contextMenu.show();
 				$("#empty-context-menu").hide();
-				contextMenu.find("#remove_section").show();
+				this.contextMenu.find("#remove_section").show();
 			}
 			else {
-				contextMenu = $("#context-menu");
+				this.contextMenu = $("#context-menu");
 			}
 
 			var td = null;
@@ -157,11 +94,11 @@ define(['editor/tabsection'], function(TabsSection) {
 				newNode.find("textarea").autosize().focus();
 				newSection = new KORDS.TABSEDITOR.TextSection(newNode, newPrettyNode, this,data);
 			} else if (type == "tabs") {
-				contextMenu.find("#add_text").show();
+				this.contextMenu.find("#add_text").show();
 				newSection = new KORDS.TABSEDITOR.TabsSection(newNode, newPrettyNode, this,data);
 				td = newNode.find("td[data-col='0'][data-row='0']");
 			} else if (type == "youtube") {
-				contextMenu.find("#add_text").show();
+				this.contextMenu.find("#add_text").show();
 				newSection = new KORDS.TABSEDITOR.YoutubeSection(newNode, newPrettyNode, this,data);
 			} else {
 				alert("NO TYPE");
@@ -169,7 +106,7 @@ define(['editor/tabsection'], function(TabsSection) {
 
 			this.htmlSections.splice(newId, 0, newSection);
 
-			newNode.append(contextMenu);
+			newNode.append(this.contextMenu);
 			this.reOrderIds();
 			this.setActiveSection(newNode,td);
 			this.updateText();
@@ -196,11 +133,11 @@ define(['editor/tabsection'], function(TabsSection) {
 		loadFromParser: function(sections) {
 			var prevNode = null;
 			if ($("#empty-context-menu").is(":visible")) {
-				contextMenu = $("#empty-context-menu").clone();
-				contextMenu.attr("id", "context-menu");
-				contextMenu.show();
+				this.contextMenu = $("#empty-context-menu").clone();
+				this.contextMenu.attr("id", "context-menu");
+				this.contextMenu.show();
 				$("#empty-context-menu").hide();
-				contextMenu.find("#remove_section").show();
+				this.contextMenu.find("#remove_section").show();
 			}
 
 			for (var i = 0; i < sections.length; i++) {
@@ -216,7 +153,7 @@ define(['editor/tabsection'], function(TabsSection) {
 				newNode.attr("id","block[" + this.numSections + "]");
 				newNode.attr("data-id", this.numSections);
 				newNode.show();
-				newNode.append(contextMenu);
+				newNode.append(this.contextMenu);
 				prevNode = newNode;
 
 				if (sections[i].type == "text") {
@@ -260,7 +197,7 @@ define(['editor/tabsection'], function(TabsSection) {
 
 			if (td) {
 				var id = sectionHtml.attr("data-id");
-				tabsInstance.tabsEditor.htmlSections[id].updateCurrentCursor(td.attr("data-col"), td.attr("data-row"));
+				this.htmlSections[id].updateCurrentCursor(td.attr("data-col"), td.attr("data-row"));
 			}
 
 			if (sectionHtml.hasClass("tabs")) {
@@ -357,7 +294,7 @@ define(['editor/tabsection'], function(TabsSection) {
 
 		addSection: function(obj, type) {
 			var parentId = parseInt(obj.attr("data-id"));
-			var newId = isNumber(parentId) ? parentId + 1 : 0;
+			var newId = Utils.isNumber(parentId) ? parentId + 1 : 0;
 
 			var typeNode = $("[id='block']." + type);
 			var newNode = typeNode.clone();
@@ -375,18 +312,18 @@ define(['editor/tabsection'], function(TabsSection) {
 
 			newPrettyNode = newPrettyNode[0];
 
-			newNode.attr("id","block[" + this.numSections + "]");
+			newNode.attr("id", "block[" + this.numSections + "]");
 			newNode.attr("data-id", this.numSections);
 			newNode.show();
 
 			if ($("#empty-context-menu").is(":visible")) {
-				contextMenu = $("#empty-context-menu").clone();
-				contextMenu.attr("id", "context-menu");
-				contextMenu.show();
+				this.contextMenu = $("#empty-context-menu").clone();
+				this.contextMenu.attr("id", "context-menu");
+				this.contextMenu.show();
 				$("#empty-context-menu").hide();
-				contextMenu.find("#remove_section").show();
+				this.contextMenu.find("#remove_section").show();
 			} else {
-				contextMenu=$("#context-menu");
+				this.contextMenu = $("#context-menu");
 			}
 
 			var td = null;
@@ -394,14 +331,14 @@ define(['editor/tabsection'], function(TabsSection) {
 
 			if (type == "text") {
 				newNode.find("textarea").autosize().focus();
-				newSection = new KORDS.TABSEDITOR.TextSection(newNode, newPrettyNode,this);
+				newSection = new TextSection(newNode, newPrettyNode,this);
 			} else if (type == "tabs") {
-				contextMenu.find("#add_text").show();
-				newSection = new KORDS.TABSEDITOR.TabsSection(newNode, newPrettyNode, this);
+				this.contextMenu.find("#add_text").show();
+				newSection = new TabsSection.TabsSection(newNode, newPrettyNode, this);
 				td = newNode.find("td[data-col='0'][data-row='0']");
 			} else if (type == "youtube") {
-				contextMenu.find("#add_text").show();
-				newSection = new KORDS.TABSEDITOR.YoutubeSection(newNode, newPrettyNode,this);
+				this.contextMenu.find("#add_text").show();
+				newSection = new YoutubeSection(newNode, newPrettyNode,this);
 			} else {
 				alert("NO TYPE");
 			}
@@ -410,7 +347,7 @@ define(['editor/tabsection'], function(TabsSection) {
 			this.htmlSections.splice(newId, 0, newSection);
 			//console.log(type,newId,this.htmlSections);
 
-			newNode.append(contextMenu);
+			newNode.append(this.contextMenu);
 			this.reOrderIds();
 			this.setActiveSection(newNode, td);
 			this.updateText();
@@ -465,6 +402,110 @@ define(['editor/tabsection'], function(TabsSection) {
 			$(".tabsection:visible").each(function(index, element) {
 				$(element).attr("id", "block[" + index + "]");
 				$(element).attr("data-id", index);
+			});
+		},
+
+		_init: function(song) {
+			this.showSongInfo = true;
+
+			this.song = song;
+			this.numSections = 0;
+			this.htmlSections = [];
+
+			this.contextMenu = null;
+
+			// create element !!!!!!!!!!!!
+			this.prettyDivId = "pretty-tab";
+			this.prettyTabsDiv = document.getElementById(this.prettyDivId);
+
+			this.prevActiveTabBlock = null;
+
+			TabsSection.insertTabBlock();
+
+			// Insert chords
+			var html = '';
+			for (var mode in UkuConstants.chords) {
+				html += '<optgroup label="' + mode + '"/>';
+				for (var chord in UkuConstants.chords[mode]){
+					html += '<option mode="' + mode + '" value="' + chord + '">' + chord + '</option>';
+				}
+			}
+			$("#chords").html(html);
+
+			this._initEventHandler();
+		},
+
+		_initEventHandler: function() {
+			var self = this;
+
+			//@fixme put everything together
+	    $(document).on("click", "#add_youtube", function() {
+				self.addSection($(this).parents(".tabsection"), 'youtube');
+				return false;
+			});
+
+	    $(document).on("click", "#add_text", function() {
+				self.addSection($(this).parents(".tabsection"), 'text');
+				return false;
+			});
+
+			$(document).on("click", "#add_tabs", function() {
+				self.addSection($(this).parents(".tabsection"), 'tabs');
+
+				$(".active .tabblock").focus();
+				return false;
+			});
+
+			$(document).on("click", ".tabblock tr.string td", function() {
+				self.setActiveSection($(this).parents(".tabsection"), $(this));
+		  });
+
+			$(document).on("focus", ".tabtext", function() {
+				self.setActiveSection($(this).parents(".tabsection"));
+			});
+
+			$(document).on("blur", ".tabtext", function() {
+				//$(this).parents(".tabsection").removeClass("active");
+				//$("#context-menu").hide();
+			});
+
+			$(document).on("mouseenter", "div.tabsection", function() {
+				$(this).removeClass("hover").addClass("hover");
+				$(this).find(".tabs-editor-context-menu").show();
+				$(this).append($("#context-menu").show());
+				if ($(this).hasClass("text")) {
+					self.contextMenu.find("#add_text").hide();
+				}
+				else {
+					self.contextMenu.find("#add_text").show();
+				}
+			});
+
+			$(document).on("mouseleave", "div.tabsection", function() {
+				$(this).removeClass("hover");
+				$("#context-menu").hide();
+			});
+
+			$(document).on("click", "#remove_section", function() {
+				self.removeSection($(this).parents(".tabsection"));
+			});
+
+			$("#insert-chords").click(function(){
+				var id = parseInt($(".tabsection.active").attr("data-id"));
+				var selected = $("#chords").find(":selected");
+				self.htmlSections[id].insertChord(selected.attr("value"),selected.attr("mode"));
+				self.prevActiveTabBlock.focus();
+				return false;
+			});
+
+			$(".modifier").click(function(){
+				var id=parseInt($(".tabsection.active").attr("data-id"));
+				self.htmlSections[id].insertModifier($(this).attr("data-modifier"));
+				return false;
+			});
+
+			$(document).on("blur", ".tabblock", function(e){
+				self.prevActiveTabBlock = $(this);
 			});
 		}
 	}

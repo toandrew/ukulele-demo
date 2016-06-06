@@ -1,15 +1,15 @@
-define(function() {
+define(['app/tabsdata', 'painter/tabcanvaspainter'], function(TabsData, CanvasPainter) {
 	'use strict';
 
-	var defaultNumMeasuresPerStave=4;
-	var defaultNumNotesPerMeasure=12;
-	var maxFrets=24;
-	var tabBlockLength=defaultNumNotesPerMeasure*defaultNumMeasuresPerStave+defaultNumMeasuresPerStave-1; // Num notes per stave + barlines$.parseXML('XML');
-	var tabBlockText="";
-	var tabBlockNotes=["E","B","G","D","A","E"];
-	var tabBlockNumStrings=tabBlockNotes.length;
-	var topColumnModifiers=["text","accents","arrows"];
-	var bottomColumnModifiers=["rfingers"];
+	var defaultNumMeasuresPerStave = 4;
+	var defaultNumNotesPerMeasure = 12;
+	var maxFrets = 24;
+	var tabBlockLength = defaultNumNotesPerMeasure * defaultNumMeasuresPerStave + defaultNumMeasuresPerStave - 1; // Num notes per stave + barlines$.parseXML('XML');
+	var tabBlockText ="";
+	var tabBlockNotes = ["E", "B", "G", "D", "A", "E"];
+	var tabBlockNumStrings = tabBlockNotes.length;
+	var topColumnModifiers = ["text", "accents", "arrows"];
+	var bottomColumnModifiers = ["rfingers"];
 
 	var TYPE_NOTE=0;
 	var TYPE_LFINGER=1;
@@ -55,16 +55,18 @@ define(function() {
 
 		this.type = "tabs";
 
+		this.isModifier = false;
+
 		if (typeof data != 'undefined') {
 			this.loadData(data);
 		} else {
-			this.sectionData = new KORDS.TABSDATA.TabSection;
+			this.sectionData = new TabsData.TabSection;
 		}
 
 		this.updateText();
 
 		this.div = prettyHtmlNode;
-		this.canvas = new KORDS.TABSPAINTER.CanvasPainter(this.div, this.sectionData);
+		this.canvas = new CanvasPainter(this.div, this.sectionData);
 
 		this.updateText();
 	}
@@ -516,7 +518,7 @@ define(function() {
 				delete this.sectionData.data['strings'][string][col];
 			} else {
 				if (!this.sectionData.data['strings'][string][col]) {
-					this.sectionData.data['strings'][string][col] = new KORDS.TABSDATA.NoteCell();
+					this.sectionData.data['strings'][string][col] = new TabsData.NoteCell();
 				}
 
 				if (this.sectionData.data['barlines'][col] != null) {
@@ -567,9 +569,9 @@ define(function() {
 							val = "-";
 						} else {
 							emptyCol = false;
-							isModifier = ($.inArray(val, ['h','p','s','^','b','v','/','\\',]) !== -1);
-							modifier |= isModifier;
-							if (!isModifier) {
+							this.isModifier = ($.inArray(val, ['h','p','s','^','b','v','/','\\',]) !== -1);
+							modifier |= this.isModifier;
+							if (!this.isModifier) {
 								hasAnyNote = true;
 							}
 						}
@@ -628,7 +630,7 @@ define(function() {
 		updateColumnModifiersButtons: function(col) {
 			$("#tabs-context-menu .colmodifier,#open-tabtext").removeClass("checked");
 
-			for (colmod in this.sectionData.data['colmodifiers']) {
+			for (var colmod in this.sectionData.data['colmodifiers']) {
 				var val = this.sectionData.data['colmodifiers'][colmod][col];
 				if (val) {
 					if (colmod == "text") {
@@ -642,7 +644,7 @@ define(function() {
 
 		updateNoteButtons: function(col, row) {
 			//@fixme get value
-			note = this.sectionData.data['strings'][row][col];
+			var note = this.sectionData.data['strings'][row][col];
 
 			$("#lfingers a[data-modifier^='lfinger']").removeClass("checked");
 
@@ -675,7 +677,7 @@ define(function() {
 		},
 
 		insertChord: function (chordId, mode) {
-			var chordDiagram = chords[mode][chordId];
+			var chordDiagram = UkuConstants.chords[mode][chordId];
 			var curCell = $(".tabblock td.active_cell", this.htmlNode);
 			var col = curCell.attr("data-col");
 

@@ -56,10 +56,10 @@ define(function() {
 	};
 
 	return {
-		nvl: nvl;
-		sluggify: sluggify;
-		sortObj: sortObj;
-		isNumber: isNumber;
-		objectSize: objectSize;
+		nvl: nvl,
+		sluggify: sluggify,
+		sortObj: sortObj,
+		isNumber: isNumber,
+		objectSize: objectSize
 	};
 });

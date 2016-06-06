@@ -9,7 +9,8 @@ requirejs.config({
     'paths': {
         'app': '../app',
         'editor': '../app/editor',
-        'jquery': 'jquery-1.9.1.min'
+        'jquery': 'jquery-1.9.1.min',
+        'painter': '../app/painter'
     },
 
     'shim': {
@@ -27,8 +28,8 @@ requirejs.config({
 // Start the main app logic.
 requirejs(['jquery', 'jquery-ui-1.9.2.custom.min', 'jquery.autosize-min', 'FileSaver.min'], function($) {
     $(document).ready(function(){
-        require(['editor/tabsinstance'], function(tabsInstance) {
-            tabsInstance.load();
+        require(['app/ukulele'], function(Ukulele) {
+            Ukulele.run();
         });
     });
 });

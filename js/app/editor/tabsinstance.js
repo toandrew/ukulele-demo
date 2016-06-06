@@ -11,7 +11,7 @@ define(['app/tabsdata', 'editor/tabeditor'], function(TabsData, Editor) {
 			if (data) {
 				this.song.load(data);
 			}
-			
+
 			if (this.tabsEditor) {
 				this.tabsEditor.load(this.song);
 			}
@@ -20,6 +20,9 @@ define(['app/tabsdata', 'editor/tabeditor'], function(TabsData, Editor) {
 		reset: function() {
 			this.song = new TabsData.Song;
 			this.tabsEditor.reset();
+		},
+
+		_initEventHandler: function() {
 		}
 	}
 

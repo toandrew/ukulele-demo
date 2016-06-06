@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<!-- saved from url=(0053)file:///Users/jim/src/ukulele/ukulele-demo/index.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
+
+	<title>Ukulele demo</title>
+
+	<link rel="stylesheet" type="text/css" href="./Ukulele demo_files/style.css">
+<script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="main" src="./Ukulele demo_files/main.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="jquery" src="./Ukulele demo_files/jquery-1.9.1.min.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="jquery-ui-1.9.2.custom.min" src="./Ukulele demo_files/jquery-ui-1.9.2.custom.min.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="jquery.autosize-min" src="./Ukulele demo_files/jquery.autosize-min.js"></script></head>
+
+<body>
+	<header>
+		<h3 id="header-title" class="title">Ukulele <span>demo</span>
+		</h3>
+		<div class="tabs">
+				<a data-tab="song" class="tab">Song</a>
+				<a data-tab="editor" class="tab active">Editor</a>
+				<a data-tab="file" class="tab">File</a>
+		</div>
+	</header>
+
+	<section id="song" class="hidden">
+		<h1 id="title_song"></h1>
+		<h2 id="title_artist"></h2>
+	</section>
+
+	<section id="editor">
+		<div id="songdata">
+			<span>Song:</span> <input type="text" id="song-name"><br>
+			<span>Artist:</span> <input type="text" id="artist"><br>
+			<span>Transcribed by:</span> <input type="text" id="transcriber" value="Jim"><br>
+		</div>
+		
+		<div id="empty-context-menu" class="tabs-editor-context-menu">
+			<a id="add_text" class="button text" href="file:///Users/jim/src/ukulele/ukulele-demo/index.html#">Add Text</a>
+			<a id="add_tabs" class="button text" href="file:///Users/jim/src/ukulele/ukulele-demo/index.html#">Add Tabs</a>
+			<a id="add_youtube" class="button text" href="file:///Users/jim/src/ukulele/ukulele-demo/index.html#">Add Youtube</a>
+			<a id="remove_section" class="button text hidden" href="file:///Users/jim/src/ukulele/ukulele-demo/index.html#">Remove this section</a>
+		</div>
+
+		<div id="text-editor" class="tabs-editor">
+		</div>
+	</section>
+
+	<section id="file" class="hidden">
+	</section>
+
+	<section id="help" class="hidden">
+	</section>
+
+	<script data-main="js/main" src="./Ukulele demo_files/require.js"></script>
+
+</body></html>

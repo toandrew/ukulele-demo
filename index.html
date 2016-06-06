@@ -1,17 +1,56 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-	<title></title>
+	<meta charset="utf-8" />
+
+	<title>Ukulele demo</title>
+
+	<link rel="stylesheet" type="text/css" href="style/css/style.css"/>
+
+	<script type="text/javascript" src="js/lib/raphael.js"></script>
 </head>
+
 <body>
 	<header>
-		<h3 id="header-title" class="title" style="text-align:left">Ukulele <span style="color: #EE7E2A;">demo</span>
+		<h3 id="header-title" class="title">Ukulele <span>demo</span>
 		</h3>
 		<div class="tabs">
-				<a data-tab="pretty" class="tab active">Pretty</a>
-				<a data-tab="editor" class="tab">Editor</a>
+				<a data-tab="song" class="tab">Song</a>
+				<a data-tab="editor" class="tab active">Editor</a>
 				<a data-tab="file" class="tab">File</a>
 		</div>
 	</header>
+
+	<section id="song" class="hidden">
+		<h1 id="title_song">a</h1>
+		<h2 id="title_artist">b</h2>
+	</section>
+
+	<section id="editor">
+		<div id="songdata">
+			<span>Song:</span> <input type="text" id="song-name"><br/>
+			<span>Artist:</span> <input type="text" id="artist"><br/>
+			<span>Transcribed by:</span> <input type="text" id="transcriber" value="Jim"><br/>
+		</div>
+		
+		<div id="empty-context-menu" class="tabs-editor-context-menu">
+			<a id="add_text" class="button text" href="#">Add Text</a>
+			<a id="add_tabs" class="button text" href="#">Add Tabs</a>
+			<a id="add_youtube" class="button text" href="#">Add Youtube</a>
+			<a id ="remove_section" class="button text hidden" href="#">Remove this section</a>
+		</div>
+
+		<div id="text-editor" class="tabs-editor">
+		</div>
+	</section>
+
+	<section id="file" class="hidden">
+	</section>
+
+	<section id="help" class="hidden">
+	</section>
+
+	<script data-main="js/main" src="js/lib/require.js"></script>
 </body>
-</html>>
+</html>

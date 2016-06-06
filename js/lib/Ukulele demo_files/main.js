@@ -1,3 +1,5 @@
+console.log('haha');
+
 requirejs.config({
     //By default load any module IDs from js/lib
     'baseUrl': 'js/lib',
@@ -8,27 +10,17 @@ requirejs.config({
     //the paths config could be for a directory.
     'paths': {
         'app': '../app',
-        'editor': '../app/editor',
         'jquery': 'jquery-1.9.1.min'
     },
 
     'shim': {
         'jquery-ui-1.9.2.custom.min': ['jquery'],
-        'jquery.autosize-min': ['jquery'],
-        'Blob': {
-            exports: 'Blob'
-        }, 
-        'FileSaver.min': {
-            exports: 'saveAs'
-        }
+        'jquery.autosize-min': ['jquery']
     }
 });
 
 // Start the main app logic.
-requirejs(['jquery', 'jquery-ui-1.9.2.custom.min', 'jquery.autosize-min', 'FileSaver.min'], function($) {
-    $(document).ready(function(){
-        require(['editor/tabsinstance'], function(tabsInstance) {
-            tabsInstance.load();
-        });
-    });
+requirejs(['jquery', 'jquery-ui-1.9.2.custom.min', 'jquery.autosize-min'], function($) {
+    console.log('haha');
+    //$('#transcriber').value = 'aa';
 });

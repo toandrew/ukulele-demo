@@ -1,0 +1,8 @@
+1. BUILD
+sudo docker build -t="jim/ukulele" .
+
+2. run
+sudo docker run -t -i -p 2223:2223 -p 5000:5000 jim/ukulele
+
+3.
+sudo docker run -t -i -p 2223:2223 -p 5000:5000 jim/ukulele /bin/bash

@@ -6,8 +6,8 @@
         var midi = AlphaTab.Audio.Generator.MidiFileGenerator.GenerateMidiFile(score);
         var ms = new AlphaTab.IO.ByteBuffer();
         midi.WriteTo(ms);
-        var bytes = ms.ToArray();
-        as.LoadMidiBytes(bytes);
+        window.midiBytes = ms.ToArray();
+        as.LoadMidiBytes(window.midiBytes);
     }
     
     // extend the api

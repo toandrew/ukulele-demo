@@ -24,6 +24,10 @@
     <!-- alphaSynth Plugin -->
     <script type="text/javascript" src="lib/alphaTab/jquery.alphaTab.alphaSynth.js"></script>
     
+    <!-- file saver -->
+    <script type="text/javascript" src="lib/filesaver/Blob.js"></script>
+    <script type="text/javascript" src="lib/filesaver/FileSaver.js"></script>
+
     <!-- Demo Styles and Scripts -->
     <link rel="stylesheet" href="support/gh-buttons.css" />
     <link rel="stylesheet" href="support/demo.css" />
@@ -42,6 +46,8 @@
             <button class="button" disabled="disabled" id="horizontalBarwise" data-layout="horizontal" data-scrollmode="horizontal-bar">Horizontal (Barwise)</button>
             <button class="button" disabled="disabled" id="horizontalOffscreen" data-layout="horizontal" data-scrollmode="horizontal-offscreen">Horizontal (Offscreen)</button>
         </div>
+
+        <button class="button" disabled="disabled" id="save">Save As A MIDI File</button>
     </div>
     
     <script type="text/javascript">
@@ -92,6 +98,11 @@
             as.Stop(); 
         });
         
+        $('#save').click(function() { 
+            var midiFileName = new Date().toLocaleTimeString() + '.bin';
+	    saveAs(new window.Blob([window.midiBytes], {type: "example/binary"}), midiFileName);
+        });
+
         function updateControls() {
             if(!playerReady) {
                 $('#loadingInfo').show()
@@ -101,6 +112,7 @@
             else {
                 $('#loadingInfo').hide()
                 $('#playPause').removeAttr('disabled');
+                $('#save').removeAttr('disabled');
                 $('#layoutButtons button').removeAttr('disabled');
                 switch(playerState) {
                     case 0: // stopped

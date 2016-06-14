@@ -99,7 +99,7 @@
         });
         
         $('#save').click(function() { 
-            var midiFileName = new Date().toLocaleTimeString() + '.bin';
+            var midiFileName = new Date().toLocaleTimeString() + '.mid';
 	    saveAs(new window.Blob([window.midiBytes], {type: "example/binary"}), midiFileName);
         });
 
